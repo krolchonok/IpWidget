@@ -3,7 +3,8 @@
     <style name="Widget.IpWidget.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
         <item name="android:padding">?attr/appWidgetPadding</item>
-        <item name="android:background">@drawable/app_widget_background</item>
+<!--        <item name="android:background">@drawable/app_widget_background</item>-->
+        <item name="android:background">#00FFFFFF</item>
         <item name="android:clipToOutline">true</item>
     </style>
 
