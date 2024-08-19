@@ -13,6 +13,7 @@
 
     <style name="Theme.IpWidget.AppWidgetContainer" parent="Theme.IpWidget.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">10dp</item>
+        <item name="appWidgetPadding">5dp</item>
+
     </style>
 </resources>

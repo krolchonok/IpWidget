@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,7 +62,13 @@ internal fun updateAppWidget(
     views.setOnClickPendingIntent(R.id.internal, longClickPendingIntent)
 
     views.setTextViewText(R.id.internal, "Обновляется...")
-    views.setTextViewText(R.id.internal, getWifiIpAddress(context))
+    val ip = getWifiIpAddress(context)
+    if (ip == "0.0.0.0") {
+        views.setViewVisibility(R.id.internal, View.GONE)
+    } else {
+        views.setViewVisibility(R.id.internal, View.VISIBLE)
+        views.setTextViewText(R.id.internal, getWifiIpAddress(context))
+    }
     appWidgetManager.updateAppWidget(appWidgetId, views)
 
     views.setTextViewText(R.id.external, "Обновляется...")
@@ -82,6 +89,7 @@ private fun getWifiIpAddress(context: Context): String? {
     val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val wifiInfo = wifiManager.connectionInfo
     val ipAddress = Formatter.formatIpAddress(wifiInfo.ipAddress)
+
     return ipAddress
 }
 

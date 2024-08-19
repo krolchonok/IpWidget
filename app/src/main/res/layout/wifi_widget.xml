@@ -20,8 +20,8 @@
             android:gravity="center"
             android:layout_weight="1"
             android:maxLines="1"
-            android:padding="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:padding="10dp"
+            android:layout_marginBottom="2dp"/>
 
         <TextView
             android:id="@+id/external"
@@ -36,7 +36,7 @@
             android:autoSizeStepGranularity="0.01sp"
             android:layout_weight="1"
             android:maxLines="1"
-            android:padding="5dp"
-            android:layout_marginTop="5dp"/>
+            android:padding="10dp"
+            android:layout_marginTop="2dp"/>
     </LinearLayout>
 </RelativeLayout>
