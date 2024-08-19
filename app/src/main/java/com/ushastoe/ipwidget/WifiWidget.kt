@@ -1,11 +1,13 @@
 package com.ushastoe.ipwidget
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
+import android.os.SystemClock
 import android.text.format.Formatter
 import android.util.Log
 import android.view.View
@@ -30,7 +32,21 @@ class WifiWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+        setupWidgetUpdateAlarm(context)
     }
+}
+
+internal fun setupWidgetUpdateAlarm(context: Context) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, WidgetUpdateReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+    alarmManager.setInexactRepeating(
+        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES, // Периодичность (15 минут)
+        AlarmManager.INTERVAL_FIFTEEN_MINUTES, // Периодичность (15 минут)
+        pendingIntent
+    )
 }
 
 internal fun updateAppWidget(
@@ -47,22 +63,15 @@ internal fun updateAppWidget(
 
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-    val longClickIntent = Intent(context, WifiWidget::class.java).apply {
-        action = "com.ushastoe.ipwidget.LONG_CLICK_ACTION"
-        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-    }
-    val longClickPendingIntent = PendingIntent.getBroadcast(context, 0, longClickIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
     val views = RemoteViews(context.packageName, R.layout.wifi_widget)
 
     views.setTextViewText(R.id.external, widgetText)
     views.setOnClickPendingIntent(R.id.external, pendingIntent)
     views.setOnClickPendingIntent(R.id.internal, pendingIntent)
 
-    views.setOnClickPendingIntent(R.id.internal, longClickPendingIntent)
-
     views.setTextViewText(R.id.internal, "Обновляется...")
     val ip = getWifiIpAddress(context)
+    println(ip)
     if (ip == "0.0.0.0") {
         views.setViewVisibility(R.id.internal, View.GONE)
     } else {
