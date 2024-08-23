@@ -3,17 +3,17 @@
 
     <style name="Theme.IpWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
-        <item name="appWidgetRadius">10dp</item>
+        <item name="appWidgetRadius">0dp</item>
         <!--
         Radius of the inner view's bound of widgets to make the rounded corners.
         It needs to be 8dp or less than the value of appWidgetRadius
         -->
-        <item name="appWidgetInnerRadius">10dp</item>
+        <item name="appWidgetInnerRadius">0dp</item>
     </style>
 
     <style name="Theme.IpWidget.AppWidgetContainer" parent="Theme.IpWidget.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">5dp</item>
+        <item name="appWidgetPadding">0dp</item>
 
     </style>
 </resources>

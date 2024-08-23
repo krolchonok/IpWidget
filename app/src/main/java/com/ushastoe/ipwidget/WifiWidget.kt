@@ -74,8 +74,10 @@ internal fun updateAppWidget(
     println(ip)
     if (ip == "0.0.0.0") {
         views.setViewVisibility(R.id.internal, View.GONE)
+        views.setViewVisibility(R.id.separator, View.GONE)
     } else {
         views.setViewVisibility(R.id.internal, View.VISIBLE)
+        views.setViewVisibility(R.id.separator, View.VISIBLE)
         views.setTextViewText(R.id.internal, getWifiIpAddress(context))
     }
     appWidgetManager.updateAppWidget(appWidgetId, views)
