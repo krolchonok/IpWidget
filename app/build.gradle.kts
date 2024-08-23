@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.ushastoe.ipwidget"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.ushastoe.ipwidget"
