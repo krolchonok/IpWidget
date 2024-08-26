@@ -1,5 +1,6 @@
 package com.ushastoe.ipwidget
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -49,6 +50,7 @@ internal fun setupWidgetUpdateAlarm(context: Context) {
     )
 }
 
+@SuppressLint("RemoteViewLayout")
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
