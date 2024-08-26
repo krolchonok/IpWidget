@@ -1,6 +1,5 @@
 package com.ushastoe.ipwidget
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -50,7 +49,6 @@ internal fun setupWidgetUpdateAlarm(context: Context) {
     )
 }
 
-@SuppressLint("RemoteViewLayout")
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
@@ -66,6 +64,7 @@ internal fun updateAppWidget(
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
     val views = RemoteViews(context.packageName, R.layout.wifi_widget)
+
 
     views.setTextViewText(R.id.external, widgetText)
     views.setOnClickPendingIntent(R.id.external, pendingIntent)
