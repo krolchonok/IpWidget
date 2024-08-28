@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "IpWidget"
+rootProject.name = "WidgetIp"
 include(":app")
  

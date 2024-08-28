@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.IpWidget.AppWidget.Container"
+    style="@style/Widget.WidgetIp.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.IpWidget.AppWidgetContainer">
+    android:theme="@style/Theme.WidgetIp.AppWidgetContainer">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,7 +10,7 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/internal"
-            style="@style/Widget.IpWidget.AppWidget.InnerView"
+            style="@style/Widget.WidgetIp.AppWidget.InnerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/appwidget_text"
@@ -22,16 +22,15 @@
             android:layout_weight="1"
             android:maxLines="1"
             android:padding="6dp"
-
             />
-        <View
+        <TextView
             android:id="@+id/separator"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:background="@drawable/sep"/>
+            android:layout_height="6dp"
+            android:background="@drawable/sep"
+            android:layout_width="2dp"/>
         <TextView
             android:id="@+id/external"
-            style="@style/Widget.IpWidget.AppWidget.InnerView"
+            style="@style/Widget.WidgetIp.AppWidget.InnerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

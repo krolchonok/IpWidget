@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.ushastoe.ipwidget"
+    namespace = "com.ushastoe.widgetip"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.ushastoe.ipwidget"
+        applicationId = "com.ushastoe.widgetip"
         minSdk = 33
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

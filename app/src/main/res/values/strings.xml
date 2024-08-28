@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">IpWidget</string>
+    <string name="app_name">WidgetIp</string>
+    <string name="hello">IpWidget</string>
+    <string name="imnew">I\'m your new app</string>
+    <string name="TitleWidget">Create widget</string>
     <string name="appwidget_text">255.255.255.255</string>
     <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="app_widget_description">Widget show IP\'s</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.ushastoe.ipwidget
+package com.ushastoe.widgetip
 
 import org.junit.Test
 

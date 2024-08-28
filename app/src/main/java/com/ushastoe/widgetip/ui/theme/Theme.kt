@@ -1,4 +1,4 @@
-package com.ushastoe.ipwidget.ui.theme
+package com.ushastoe.widgetip.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,14 +34,14 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun IpWidgetTheme(
+fun WidgetIpTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }

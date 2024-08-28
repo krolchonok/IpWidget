@@ -1,4 +1,4 @@
-package com.ushastoe.ipwidget
+package com.ushastoe.widgetip
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.ushastoe.ipwidget", appContext.packageName)
+        assertEquals("com.ushastoe.widgetip", appContext.packageName)
     }
 }

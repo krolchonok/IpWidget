@@ -1,4 +1,4 @@
-package com.ushastoe.ipwidget.ui.theme
+package com.ushastoe.widgetip.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

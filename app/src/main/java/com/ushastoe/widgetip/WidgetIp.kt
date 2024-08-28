@@ -1,13 +1,13 @@
-package com.ushastoe.ipwidget
+package com.ushastoe.widgetip
 
-import android.app.AlarmManager
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
-import android.os.SystemClock
+import android.os.Bundle
 import android.text.format.Formatter
 import android.util.Log
 import android.view.View
@@ -19,36 +19,38 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-/**
- * Implementation of App Widget functionality.
- */
-class WifiWidget : AppWidgetProvider() {
+
+class WidgetIp : AppWidgetProvider() {
+
+    override fun onEnabled(context: Context) {
+        Log.d("widget", "onEnabled")
+    }
+
+    override fun onDisabled(context: Context) {
+        Log.d("widget", "onDisabled")
+    }
+    override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+        val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+        val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+        val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+        println("width - $width  height - $height")
+    }
+
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
+        Log.d("wifi", "onUpdate()")
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
-        setupWidgetUpdateAlarm(context)
     }
 }
 
-internal fun setupWidgetUpdateAlarm(context: Context) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, WidgetUpdateReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-    alarmManager.setInexactRepeating(
-        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-        SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES, // Периодичность (15 минут)
-        AlarmManager.INTERVAL_FIFTEEN_MINUTES, // Периодичность (15 минут)
-        pendingIntent
-    )
-}
-
+@SuppressLint("RemoteViewLayout")
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
@@ -56,14 +58,14 @@ internal fun updateAppWidget(
 ) {
     val widgetText = context.getString(R.string.appwidget_text)
 
-    val intent = Intent(context, WifiWidget::class.java).apply {
+    val intent = Intent(context, WidgetUpdateReceiver::class.java).apply {
         action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
     }
 
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-    val views = RemoteViews(context.packageName, R.layout.wifi_widget)
+    val views = RemoteViews(context.packageName, R.layout.widgetip)
 
 
     views.setTextViewText(R.id.external, widgetText)
@@ -72,14 +74,13 @@ internal fun updateAppWidget(
 
     views.setTextViewText(R.id.internal, "Обновляется...")
     val ip = getWifiIpAddress(context)
-    println(ip)
     if (ip == "0.0.0.0") {
         views.setViewVisibility(R.id.internal, View.GONE)
         views.setViewVisibility(R.id.separator, View.GONE)
     } else {
         views.setViewVisibility(R.id.internal, View.VISIBLE)
         views.setViewVisibility(R.id.separator, View.VISIBLE)
-        views.setTextViewText(R.id.internal, getWifiIpAddress(context))
+        views.setTextViewText(R.id.internal, ip)
     }
     appWidgetManager.updateAppWidget(appWidgetId, views)
 

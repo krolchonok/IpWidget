@@ -1,7 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
-    <style name="Theme.IpWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+    <style name="Theme.WidgetIp" parent="android:Theme.Material.Light.NoActionBar">
+
+    </style>
+
+    <style name="Theme.WidgetIp.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
         <item name="appWidgetRadius">0dp</item>
         <!--
@@ -11,9 +15,8 @@
         <item name="appWidgetInnerRadius">0dp</item>
     </style>
 
-    <style name="Theme.IpWidget.AppWidgetContainer" parent="Theme.IpWidget.AppWidgetContainerParent">
+    <style name="Theme.WidgetIp.AppWidgetContainer" parent="Theme.WidgetIp.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">0dp</item>
-
+        <item name="appWidgetPadding">2dp</item>
     </style>
 </resources>
