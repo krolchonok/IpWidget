@@ -8,7 +8,6 @@ import android.content.ComponentName
 
 class WidgetUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        println("OnRecive, hello")
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val componentName = ComponentName(context, WidgetIp::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)

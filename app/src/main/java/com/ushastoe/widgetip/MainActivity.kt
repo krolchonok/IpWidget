@@ -35,6 +35,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.GlanceId
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.provideContent
+import com.google.android.material.color.MaterialColors
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +51,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Preview(showSystemUi = true)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+
     val context = LocalContext.current
     WidgetIpTheme {
         val primaryColor = MaterialTheme.colorScheme.primary
@@ -58,8 +63,7 @@ fun GreetingPreview() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+                .padding(16.dp), verticalArrangement = Arrangement.Center
         ) {
             OutlinedCard(
                 modifier = Modifier
@@ -69,8 +73,7 @@ fun GreetingPreview() {
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_launcher_foreground),
@@ -78,12 +81,9 @@ fun GreetingPreview() {
                         Modifier.height(50.dp)
                     )
                     Text(
-                        text = stringResource(R.string.hello),
-                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.hello), textAlign = TextAlign.Center,
 //                        modifier = Modifier.padding(start = 8.dp),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        fontSize = 18.sp, modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -96,8 +96,7 @@ fun GreetingPreview() {
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = stringResource(R.string.TitleWidget),
@@ -109,33 +108,52 @@ fun GreetingPreview() {
                             )
                             .fillMaxWidth(),
                     )
-                    Button(
-                        onClick = { requestWidget(context) },
-                        modifier = Modifier
-                            .padding(5.dp)
+                    Row (
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Add widget"
-                        )
+                        Button(
+                            onClick = { requestWidget(context, "simple") },
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            Text(
+                                text = "Add widget"
+                            )
+                        }
+                        Button(
+                            onClick = { requestWidget(context, "full") },
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            Text(
+                                text = "Add full widget"
+                            )
+                        }
                     }
+
                 }
             }
         }
     }
 }
 
-fun requestWidget(context: Context) {
+fun requestWidget(context: Context, type: String) {
     val appWidgetManager = AppWidgetManager.getInstance(context)
-    val myProvider = ComponentName(context, WidgetIp::class.java)
+
+    val myProvider: ComponentName? = when (type) {
+
+        "simple" -> ComponentName(context, WidgetIp::class.java)
+        "full" -> ComponentName(context, WidgetIpFull::class.java)
+        else -> null
+    }
 
     if (appWidgetManager.isRequestPinAppWidgetSupported) {
         val successCallback = PendingIntent.getBroadcast(
-            context,
-            0,
-            Intent(),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, Intent(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+        if (myProvider != null) {
+            appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+        } else {
+            return
+        }
     }
 
 }
