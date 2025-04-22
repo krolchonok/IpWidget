@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +26,10 @@ class MainIpWidget : AppWidgetProvider() {
     private val scope = CoroutineScope(Dispatchers.IO)
     private val handler = Handler(Looper.getMainLooper())
     private val ACTION_UPDATE = "com.ushastoe.ipwidget.ACTION_UPDATE"
+
+    companion object {
+        private var networkCallbackHelper: NetworkCallbackHelper? = null
+    }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         for (appWidgetId in appWidgetIds) {
@@ -48,13 +54,20 @@ class MainIpWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
+        super.onEnabled(context)
+        // Регистрируем BroadcastReceiver при создании первого виджета
+        networkCallbackHelper = NetworkCallbackHelper(context).apply {
+            register()
+        }
     }
 
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
         handler.removeCallbacksAndMessages(null)
+        networkCallbackHelper?.unregister()
+        networkCallbackHelper = null
     }
+
 
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val views = RemoteViews(context.packageName, R.layout.main_ip_widget)
@@ -72,6 +85,20 @@ class MainIpWidget : AppWidgetProvider() {
         )
         views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
 
+        // Проверяем состояние сети перед обновлением
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+
+        if (capabilities == null) {
+            views.setTextViewText(R.id.localIpWidget, "No network")
+            views.setTextViewText(R.id.externalIpWidget, "No network")
+            views.setViewVisibility(R.id.localIpContainer, View.GONE)
+            views.setViewVisibility(R.id.ipDivider, View.GONE)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+            return
+        }
+
         // Инициализация всех полей
         views.setTextViewText(R.id.localIpWidget, "...")
         views.setTextViewText(R.id.externalIpWidget, "...")
@@ -85,15 +112,19 @@ class MainIpWidget : AppWidgetProvider() {
         scope.launch {
             val hotspotIp = getHotspotIpAddress()
             val localIp = if (hotspotIp != null) {
-                hotspotIp // Если есть hotspot, используем его IP как локальный
+                hotspotIp
             } else {
-                getLocalIpAddress(context) // Иначе получаем обычный локальный IP
+                getLocalIpAddress(context)
             } ?: "N/A"
 
-            val externalIp = try {
-                URL("https://api.ipify.org").readText()
-            } catch (e: Exception) {
-                "N/A"
+            val externalIp = if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                try {
+                    URL("https://api.ipify.org").readText()
+                } catch (e: Exception) {
+                    "N/A"
+                }
+            } else {
+                "No internet"
             }
 
             handler.post {

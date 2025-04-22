@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import org.ushastoe.ipw.ui.theme.IpWTheme
 
 class MainActivity : ComponentActivity() {
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     companion object {
         fun requestWidgetPinning(context: Context) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
